@@ -1,3 +1,21 @@
-.selected {
+.nav-links button {
+  padding: 20px 10px;
+  width: 50%;
+  background-color: #fff;
+  color: #000;
+}
+.nav-links button.selected {
   font-weight: bold;
+  background-color: lightseagreen;
+  color: #fff;
+}
+.nav-links {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  width: 100%;
+  left: 0;
+  right: 0;
+  top: 0;
+  border-bottom: 2px solid lightseagreen;
 }

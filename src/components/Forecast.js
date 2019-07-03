@@ -6,14 +6,26 @@ class Forecast extends React.Component {
     let forecast = [];
     for (const day in this.props.forecast) {
       forecast.push(
-        <div className="row">
+        <div className="row" key={day}>
+          <h1>{day.date}</h1>
           {this.props.forecast[day].map(item => (
-            <div key="item.id">{item.day}</div>
+            <div key={item.id} className="forecast-day">
+              <b>{item.day}</b>
+              <p>{item.time}</p>
+              <img src={item.icon} alt="weather icon" />
+              <p>{item.conditions}</p>
+              <p>{item.temp}&deg;F </p>
+            </div>
           ))}
         </div>
       );
     }
-    return forecast;
+    return this.props.forecast ? (
+      <div>
+        <h1>5 day forecast for zip code {this.props.zip}</h1>
+        {forecast}
+      </div>
+    ) : null;
   }
 }
 

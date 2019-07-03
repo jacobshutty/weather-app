@@ -5,10 +5,10 @@ class CurentTemperature extends React.Component {
     return (
       <div>
         {this.props.currentTemp ? (
-          <h1>
-            The current temp is {this.props.currentTemp.currentTemp} degrees
-            fahrenheit
-          </h1>
+          <div>
+            <h1>Current temperature for {this.props.zip}</h1>
+            <h2>{this.props.currentTemp.currentTemp} &deg;F</h2>
+          </div>
         ) : null}
       </div>
     );

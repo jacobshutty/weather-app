@@ -8,13 +8,8 @@ function api(query) {
   return axios.get(`${endpoint}${query}&appid=${key}&units=${units}`);
 }
 
-export function getLocation() {
-  return navigator.geolocation.getCurrentPosition(function(location) {
-    return location;
-  });
-}
-
 export function getTemperature(zip) {
+  // Get current temperature based on zip code
   return api(`weather?zip=${zip}`).then(response => {
     const main = response.data.main;
     return {
@@ -26,17 +21,22 @@ export function getTemperature(zip) {
 }
 
 export function getForecast(zip) {
+  // Get 5 day forecast based on zip code
   return api(`forecast?zip=${zip}`).then(response => {
     console.log(response);
     const items = response.data.list.map(item => {
       const date = new Date(item.dt * 1000);
       return {
         temp: item.main.temp,
-        id: item.dt,
-        day: date.getDate()
+        id: item.dt, // unix timestamp
+        day: `${date.getMonth()} / ${date.getDate()}`,
+        time: `${((date.getHours() + 11) % 12) + 1}:00 ${
+          date.getHours() >= 12 ? "PM" : "AM"
+        }`,
+        icon: `http://openweathermap.org/img/wn/${item.weather[0].icon}@2x.png`,
+        conditions: item.weather[0].description
       };
     });
-    console.log(groupBy(items, "day"));
     return groupBy(items, "day");
   });
 }
