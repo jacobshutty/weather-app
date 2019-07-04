@@ -1,6 +1,7 @@
 .App {
   text-align: center;
   padding: 100px;
+  box-sizing: border-box;
 }
 
 .app-wrapper {
@@ -8,6 +9,8 @@
   display: inline-block;
   padding: 40px;
   position: relative;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 h1 {
