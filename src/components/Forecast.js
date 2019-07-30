@@ -4,11 +4,11 @@ import "./../styles/Forecast.css";
 class Forecast extends React.Component {
   render() {
     let forecast = [];
-    for (const day in this.props.forecast) {
+    for (const day in this.props.forecast.items) {
       forecast.push(
         <div className="row" key={day}>
           <h1>{day.date}</h1>
-          {this.props.forecast[day].map(item => (
+          {this.props.forecast.items[day].map(item => (
             <div key={item.id} className="forecast-day">
               <b>{item.day}</b>
               <p>{item.time}</p>
@@ -22,7 +22,7 @@ class Forecast extends React.Component {
     }
     return this.props.forecast ? (
       <div>
-        <h1>5 day forecast for zip code {this.props.zip}</h1>
+        <h1>5 day forecast for {this.props.forecast.cityName}</h1>
         {forecast}
       </div>
     ) : null;

@@ -6,7 +6,7 @@ class CurentTemperature extends React.Component {
       <div>
         {this.props.currentTemp ? (
           <div>
-            <h1>Current temperature for {this.props.zip}</h1>
+            <h1>Current temperature for {this.props.currentTemp.cityName}</h1>
             <h2>{this.props.currentTemp.currentTemp} &deg;F</h2>
           </div>
         ) : null}

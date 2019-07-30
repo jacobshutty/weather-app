@@ -8,35 +8,61 @@ function api(query) {
   return axios.get(`${endpoint}${query}&appid=${key}&units=${units}`);
 }
 
-export function getTemperature(zip) {
+function temperatureData(response) {
+  const main = response.data.main;
+  return {
+    cityName: response.data.name,
+    currentTemp: main.temp,
+    minTemp: main.temp_min,
+    maxTemp: main.temp_max,
+  };
+}
+
+function forecastData(response) {
+  const items = response.data.list.map(item => {
+    const date = new Date(item.dt * 1000);
+    return {
+      temp: item.main.temp,
+      id: item.dt, // unix timestamp
+      day: `${date.getMonth()} / ${date.getDate()}`,
+      time: `${((date.getHours() + 11) % 12) + 1}:00 ${
+        date.getHours() >= 12 ? "PM" : "AM"
+      }`,
+      icon: `http://openweathermap.org/img/wn/${item.weather[0].icon}@2x.png`,
+      conditions: item.weather[0].description,
+    };
+  });
+  return {
+    cityName: response.data.city.name,
+    items: groupBy(items, "day"),
+  };
+}
+
+export function getTemperatureByZip(zip) {
   // Get current temperature based on zip code
   return api(`weather?zip=${zip}`).then(response => {
-    const main = response.data.main;
-    return {
-      currentTemp: main.temp,
-      minTemp: main.temp_min,
-      maxTemp: main.temp_max
-    };
+    return temperatureData(response);
   });
 }
 
-export function getForecast(zip) {
+export function getTemperatureByGeo(lat, long) {
+  // Get current temperature based on geo location
+  return api(`weather?lat=${lat}&lon=${long}`).then(response => {
+    console.log(response);
+    return temperatureData(response);
+  });
+}
+
+export function getForecastByZip(zip) {
   // Get 5 day forecast based on zip code
   return api(`forecast?zip=${zip}`).then(response => {
-    console.log(response);
-    const items = response.data.list.map(item => {
-      const date = new Date(item.dt * 1000);
-      return {
-        temp: item.main.temp,
-        id: item.dt, // unix timestamp
-        day: `${date.getMonth()} / ${date.getDate()}`,
-        time: `${((date.getHours() + 11) % 12) + 1}:00 ${
-          date.getHours() >= 12 ? "PM" : "AM"
-        }`,
-        icon: `http://openweathermap.org/img/wn/${item.weather[0].icon}@2x.png`,
-        conditions: item.weather[0].description
-      };
-    });
-    return groupBy(items, "day");
+    return forecastData(response);
+  });
+}
+
+export function getForecastByGeo(lat, long) {
+  // Get 5 day forecast based on geo location
+  return api(`forecast?lat=${lat}&lon=${long}`).then(response => {
+    return forecastData(response);
   });
 }
